@@ -1,0 +1,17 @@
+[Unit]
+Description=My Application Service
+After=network.target postgresql.service
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User={{ pillar['app']['user']['name'] }}
+Group={{ pillar['app']['user']['group'] }}
+WorkingDirectory={{ pillar['app']['user']['home'] }}/app
+Environment="PATH={{ pillar['app']['user']['home'] }}/app/venv/bin"
+ExecStart={{ pillar['app']['user']['home'] }}/app/venv/bin/python manage.py runserver 0.0.0.0:8000
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
